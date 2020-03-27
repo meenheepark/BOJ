@@ -1,0 +1,45 @@
+#include <iostream>
+#include <queue>
+#include <deque>
+using namespace std;
+int n, m;
+int check[101][101];
+int a[101][101];
+
+int dx[] = { 1, -1, 0, 0 };
+int dy[] = { 0, 0, 1, -1 };
+
+int main() {
+	cin >> m >> n;
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= m; j++) {
+			scanf_s("%1d", &a[i][j]);
+			check[i][j] = -1;
+		}
+	}
+	deque <pair <int, int>> dq;
+	dq.push_back(make_pair(1, 1));
+	check[1][1] = a[1][1];
+
+
+	while (!dq.empty()) {
+		int x1 = dq.front().first;
+		int y1 = dq.front().second;
+		dq.pop_front();
+		for (int i = 0; i < 4; i++) {
+			int x2 = x1 + dx[i];
+			int y2 = y1 + dy[i];
+			if (x2>=1 && x2<= n && y2 >= 1 && x2 <= m) {
+				if (check[x2][y2] == -1 && a[x2][y2] == 0) { // 벽안부수기
+					dq.push_front(make_pair(x2, y2));
+					check[x2][y2] = check[x1][y1];
+				}
+				if (check[x2][y2] == -1 && a[x2][y2] == 1) {//벽부수기
+					dq.push_back(make_pair(x2, y2));
+					check[x2][y2] = check[x1][y1] + 1;
+				}
+			}
+		}
+	}
+	cout << check[n][m] << endl;
+}

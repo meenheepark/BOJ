@@ -1,0 +1,35 @@
+#include <cstdio>
+#include <iostream>
+#include <queue>
+using namespace std;
+// 갔다가 돌아와서 가는게 아니고, 최단경로이므로 BFS 써야함
+queue <int> q;
+int a[200000] = {0};
+int d[200000] = { 0 };
+int n, k;
+int dx(int num,int a) {
+	if (num == 0) return a - 1;
+	if (num == 1) return a + 1;
+	if (num == 2) return 2*a;
+}
+
+int main() {
+	cin >> n >> k;
+	q.push(n);
+	int ans = 0;
+	while (!q.empty()) {
+		int x = q.front();
+		q.pop();
+		a[x] = 1;
+		for (int i = 0; i < 3; i++) {
+			int nx = dx(i, x);
+			if (a[nx] == 0 && nx < 200000 && nx > 0) {//방문한것들은 덮여쓰여지지 않는다
+				a[nx] = 1;
+				q.push(nx);
+				d[nx] = d[x] + 1; // 초
+			}
+		}
+	}
+
+	cout << d[k] <<endl;
+}

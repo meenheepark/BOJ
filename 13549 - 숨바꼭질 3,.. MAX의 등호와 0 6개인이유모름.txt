@@ -1,0 +1,54 @@
+#include <iostream>
+#include <queue>
+#include <deque>
+using namespace std;
+//순간이동 ... 덱을 사용해 순간이동은 덱의 앞에, 걷기는 뒤에 넣기.
+
+bool check[1000000];
+int sec[1000000];
+int MAX = 1000000;
+
+int main() {
+	int n, k;
+	cin >> n >> k;
+	queue <int> q1;
+	queue <int> q2;
+	q1.push(n);
+	sec[n] = 0;
+	check[n] = true;
+
+	while (!q1.empty()) {
+		int x = q1.front();
+		q1.pop();
+		if (x*2 < MAX) {// 왜 부호 없어야되는지?
+			if (check[2*x] == false) {
+				q1.push(2*x);
+				check[2*x] = true;
+				sec[2*x] = sec[x]; 
+			}
+		}
+		if (x-1 >= 0) {
+			if (check[x - 1] == false) {
+				q2.push(x-1);
+				check[x - 1] = true;
+				sec[x - 1] = sec[x] + 1;
+			}
+		}
+		if (x+1 < MAX) {
+			if (check[x + 1] == false) {
+				q2.push(x + 1);
+				check[x + 1] = true;
+				sec[x + 1] = sec[x] + 1;
+			}
+		}
+		if (q1.empty()) {
+			q1 = q2;
+			q2 = queue<int>(); // 큐 하나 새로 생성
+		} // queue 바꿔주는 부분.
+	}
+
+	cout << sec[k] << endl;
+	return 0;
+}
+
+// 덱 이용하면 push_front, push_back, pop_front 적절히 사용하기 + 큐가 두개가 필요 없음 덱 하나만 선언

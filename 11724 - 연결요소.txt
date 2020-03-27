@@ -1,0 +1,63 @@
+#include <cstdio>
+#include <algorithm>
+#include <cstring>
+#include <vector>
+#include <queue>
+#include <iostream>
+using namespace std;
+vector <int> ver[1001]; // 정점 번호는 1번부터 N번까지이다.
+queue<int> q;
+bool check[1001] = { false };
+
+void dfs(int x) {
+	check[x] = true;
+	//cout << x;
+	for (int j = 0; j < ver[x].size(); j++) {
+		int y = ver[x][j];
+		if (check[y] == false) {
+			dfs(y);
+		}
+	}
+}
+
+void bfs(int x) {
+	memset(check, false, sizeof(check)); // dfs하고 나서 리셋
+	check[x] = true;
+	q.push(x);
+	while (!q.empty()) {
+		int y = q.front();
+		q.pop();
+		//cout << y;
+		for (int i = 0; i < ver[y].size(); i++) {
+			int next = ver[y][i];
+			if (check[next] == false) {
+				check[next] = true;
+				q.push(next);
+			}
+		}
+	}
+
+}
+
+
+int main() {
+	int n, m, v;
+	cin >> n >> m ;
+	for (int i = 0; i < m; i++) { // 인접 리스트로 구현
+		int from, to;
+		cin >> from >> to;
+		ver[from].push_back(to);
+		ver[to].push_back(from);
+	}
+	int num = 0;
+	for (int i = 1; i <= n; i++) {
+		if (check[i]==false) {
+			dfs(i);
+			num++;
+		}
+	}
+	//dfs(v);
+	cout << num << endl;
+	//bfs(v);
+	return 0;
+}

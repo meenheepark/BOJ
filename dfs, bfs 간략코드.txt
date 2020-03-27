@@ -1,0 +1,48 @@
+void dfs(int x) {
+	check[x] = true; // 방문했는지 검사 배열
+	for (int i = 1; i <= n; i++) {
+		if (a[x][i] == 1 && check[i] == false) { // 인접행렬
+			dfs(i); // 재귀
+		}
+	}
+}
+
+void dfs(int x) { // 인접리스트
+	check[x] = true;
+	for (int i = 0; i < a[x].size(); i++) {
+		int y = a[x][i]; // 리스트는 무조건 있으니까 간선확인 필요x
+		if (check[y] == false) { // 방문하지 않았으면 찾음
+			dfs(y);
+		}
+	}
+}
+
+queue<int> q; // 인접행렬
+check[1] = true; q.push(1);
+while (!q.empty()) {
+	int x = q.front(); q.pop();
+	for (int i = 1; i <= n; i++) {
+		if (a[x][i] == 1 && check[i] == false) {
+			check[i] == true;
+			q.push(i);
+		}
+	}
+}
+
+queue<int> q; // 인접행렬
+check[1] = true; q.push(1);
+while (!q.empty()) {
+	int x = q.front(); q.pop();
+		for (int j = 0; i < a[x].size(); i++) {
+			int y = a[x][j]; // 리스트는 무조건 있으니까 간선확인 필요x
+			if (check[y] == false) { // 방문하지 않았으면 찾음
+				check[y] == true;
+				q.push(j);
+			}
+		}
+}
+
+<시간복잡도>
+
+인접행렬 : O(V^2)
+인접리스트 : O(V+E)

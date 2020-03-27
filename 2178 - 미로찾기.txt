@@ -1,0 +1,63 @@
+#include <iostream>
+#include <cstdio>
+#include <queue>
+
+// BFS의 목적은 임의의 정점에서 시작하여 모든 정점을 한번씩 방문하는 것
+// BFS는 최단거리를 구하는 알고리즘 -- 모든 가중치가 1일 때
+// 1. 최소비용 문제여야 한다(여기서 비용이란 가중치를 의미)
+// 2. 간선의 가중치가 1이어야 한다.
+// 3. 정점과 간선의 갯수가 시간, 메모리 제한에 걸리지 않아야 한다.
+// (1,1)->(n,m) 가장 빠른길... DFS로는 못풀음. BFS로 풀어야함
+// BFS가 단계별로 진행된다는 사실 이용.
+
+using namespace std;
+
+int dx[] = {1, -1, 0, 0};
+int dy[] = {0, 0, 1, -1};
+int a[101][101] = { 0 };
+int ans[101][101] = { 0 };
+int n, m, cnt = 1;
+
+void bfs(int x, int y, int cnt) {
+	queue <pair <int ,int>> q;
+	q.push(make_pair(x, y));
+	ans[x][y] = cnt++;
+	while (!q.empty()) {
+		int x = q.front().first;//x 넣고
+		int y = q.front().second;//y 넣고
+		q.pop();
+		for (int i = 0; i < 4; i++) {
+			int nx = x + dx[i];
+			int ny = y + dy[i];
+			if (nx >= 1 && nx <= n && ny >= 1 && ny <= m) {
+				if (a[nx][ny] == 1 && ans[nx][ny] == 0) {
+					ans[nx][ny] = ans[x][y]+1; // 전에거에서 하나만 더하기
+					q.push(make_pair(nx, ny));
+				}
+			}
+		}
+	}
+}
+
+int main() {
+	scanf_s("%d %d", &n, &m);
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= m; j++) {
+			scanf_s("%1d", &a[i][j]);
+		}
+	}
+
+	bfs(1, 1, 1);
+	
+	for (int i = 1; i <= n; i++) {
+		for (int j = 1; j <= m; j++) {
+			printf("%1d", ans[i][j]);
+		}
+		cout << endl;
+	}
+
+	cout << ans[n][m] << endl;
+	
+	return 0;
+
+}

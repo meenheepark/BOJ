@@ -1,0 +1,55 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+vector <int> ver[20000];
+bool color[20000];
+
+bool dfs(int x, int c) {
+	color[x] = c;
+	for (int i = 0; i < ver[x].size() ; i++) {
+		int next = ver[x][i];
+		cout << color[x] << endl;
+		if (color[next] == 0) { // 아직 방문 안했으면
+			if(dfs(next, 3 - c) == false) { // 다음것이 재귀하여 돌고왔을때와 비교
+			return false;
+			}
+		}
+		else if (color[next] == color[x]) {
+			return false; // 방문을 이미 한것들 체크했더니 팔스
+		}
+	}
+	return true; /// 무사히 통과면 트루
+}
+
+int main() {
+	int k, v, e;
+	int from, to;
+	bool ok[5] = {true};
+	cin >> k ;
+	for (int r = 0; r < k; r++) {
+		cin >> v >> e;
+		for (int i = 1; i <= v; i++) {
+			ver[i].clear();
+			color[i] = 0;
+		}
+		for (int i = 0; i < e; i++) {
+			cin >> from >> to;
+			ver[from].push_back(to);
+			ver[to].push_back(from);
+		}
+		for (int j = 1; j <= v; j++) {
+			if (color[j] == 0) {
+				if(dfs(j, 1) == false)
+					ok[r] = false;
+			}
+		}
+	}
+	for (int i = 0; i < k; i++) {
+		if (ok[i] == false) cout << "NO" << endl;
+		else cout << "YES" << endl;
+	}
+
+}

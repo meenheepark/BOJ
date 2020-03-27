@@ -1,0 +1,57 @@
+#include <queue>
+#include <cstdio>
+#include<algorithm>
+
+using namespace std;
+
+int d[50][50] = { 0 }; // 단지번호 붙이는 배열
+int a[50][50]; // 인접행렬
+int dx[] = { 0,0,1,-1,1,1,-1,-1 };
+int dy[] = { 1,-1,0,0,1,-1,1,-1 };
+int n = 0;
+int cnt = 0;
+int w, h;
+void bfs(int x, int y, int cnt) {
+	queue <pair <int, int>> q;
+	q.push(make_pair(x, y));
+	d[x][y] = cnt;
+	while (!q.empty()) {
+		x = q.front().first; y = q.front().second;
+		q.pop();
+		for (int i = 0; i < 8; i++) {
+			int nx = x + dx[i];
+			int ny = y + dy[i];
+			if (nx >= 0 && nx < w && ny >= 0 && ny <= h) {
+				if (a[nx][ny] == 1 && d[nx][ny] == 0) {
+					d[nx][ny] = cnt;
+					q.push(make_pair(nx, ny));
+				}
+			}
+		}
+	}
+}
+
+
+int main() {
+	while (1) {
+		scanf("%d %d", &w, &h);
+		if (w == 0 && h == 0) break;
+
+		for (int i = 0; i < w; i++) {
+			for (int j = 0; j < h; i++) {
+				scanf_s("%1d", &a[i][j]);
+			}
+		}
+		for (int i = 0; i < w; i++) {
+			for (int j = 0; j < h; i++) {
+				if (a[i][j] == 1 && d[i][j] == 0)
+				{
+					bfs(i, j, ++cnt);
+				}
+			}
+		}
+		printf("%d\n", cnt);
+
+	}
+	return 0;
+}

@@ -1,0 +1,45 @@
+#include <tuple>
+#include <iostream>
+#include <queue>
+#include <cstring> // memset 이걸로 쓰임
+using namespace std;
+// 갔다가 돌아와서 가는게 아니고, 최단경로이므로 BFS 써야함
+queue <pair <int, int>> q;
+int d[1001][1001]; //초, 안방문 했으면 0
+int s, n ;
+
+int main() {
+	cin >> n;
+	memset(d, -1, sizeof(d));
+	q.push(make_pair(1, 0));
+	d[1][0] = 0;
+	while (!q.empty()) {
+		int s = q.front().first;
+		int k = q.front().second;
+		//tie(s, k) = q.front();
+		q.pop();
+		if (d[s][s] == -1) { // 방문 해도 됨. 화면을 모두복사 클립에
+			d[s][s] = d[s][k] + 1;
+			q.push(make_pair(s, s));
+		}
+		if (d[s + k][k] == -1 && s + k <= n) { // 클립을 다 화면에 붙여넣기
+			d[s + k][k] = d[s][k] + 1;
+			q.push(make_pair(s + k, k));
+		}
+		if (d[s - 1][k] == -1 && s - 1 >= 0) { // 화면 하나 삭제
+			d[s - 1][k] = d[s][k] + 1;
+			q.push(make_pair(s - 1, k));
+		}
+	}
+
+	int ans = -1;
+	for (int i = 0; i <= n; i++) {
+		if (d[n][i] != -1) {
+			if (ans == -1 || d[n][i] < ans) {
+				ans = d[n][i];
+			}
+		}
+	}
+	cout << ans <<endl;
+	return 0;
+}
